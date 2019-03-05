@@ -135,9 +135,13 @@ function replace_due_date()
 }
 
 # Replace any deferral date (t:DATE) of the task in $LINE by $ADJUST
-function replace_deferral_date()
+function add_or_replace_deferral_date()
 {
   TAG=t
+  if [[ -z "$TODO_AGAIN_ADD_DEFERRAL" && ! $LINE =~ .*\ $TAG:[[:digit:]].* ]]
+  then
+    LINE="$LINE $TAG:$TODAY"
+  fi
   replace_tagged_date
 }
 
@@ -153,7 +157,7 @@ else
   remove_creation_date
 fi
 replace_due_date
-replace_deferral_date
+add_or_replace_deferral_date
 
 if [[ "$LINE" != "" ]]
 then
